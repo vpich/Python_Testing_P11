@@ -56,6 +56,8 @@ def purchasePlaces():
         abort(400, description="Sorry, you're not allowed to use unavalaible points.")
     elif placesRequired > 12:
         abort(400, description="Sorry, you can't buy more than 12 places per competitions.")
+    elif placesRequired > int(competition['numberOfPlaces']):
+        abort(400, description="Sorry, you can't buy more than places avalaible in this competition.")
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
 
     flash('Great-booking complete!')
