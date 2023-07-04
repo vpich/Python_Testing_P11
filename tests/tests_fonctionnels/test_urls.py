@@ -86,3 +86,12 @@ class UrlsTest(TestCase):
             "places": 13})
         assert response.status_code == 400
         assert b"more than 12 places per competitions." in response.data
+
+    # BUG supplémentaire
+    def test_book_more_than_max_places_fail(self):
+        response = self.client.post("/purchasePlaces", data={
+            "competition": FAKE_COMPETITIONS[0]["name"],
+            "club": FAKE_CLUBS[1]["name"],
+            "places": 7})
+        assert response.status_code == 400
+        assert b"more than places avalaible in this competition." in response.data
