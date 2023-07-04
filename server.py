@@ -1,5 +1,6 @@
 import json
-from flask import Flask,render_template,request,redirect,flash,url_for, abort
+from flask import Flask, render_template, request, redirect, flash, url_for, abort
+import datetime
 
 
 def loadClubs():
@@ -12,6 +13,14 @@ def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
+
+
+def check_competition_date(date):
+    converted_date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    now = datetime.datetime.now()
+    if converted_date > now:
+        return True
+    return False
 
 
 app = Flask(__name__)
@@ -40,7 +49,11 @@ def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
     if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
+        if check_competition_date(foundCompetition["date"]):
+            return render_template('booking.html', club=foundClub, competition=foundCompetition)
+        else:
+            flash("You can't book a previous competition")
+            return render_template('welcome.html', club=club, competitions=competitions)
     else:
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
