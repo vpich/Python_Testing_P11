@@ -54,6 +54,8 @@ def purchasePlaces():
 
     if placesRequired > int(club["points"]):
         abort(400, description="Sorry, you're not allowed to use unavalaible points.")
+    elif placesRequired > 12:
+        abort(400, description="Sorry, you can't buy more than 12 places per competitions.")
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
 
     flash('Great-booking complete!')
