@@ -44,3 +44,15 @@ class UrlsTest(TestCase):
         response = self.client.get("/")
         self.assertTemplateUsed('index.html')
         assert response.status_code == 200
+
+    # ERROR n1
+    def test_login_fail(self):
+        response = self.client.post("/showSummary", data={"email": "wrong@club.com"})
+        assert response.status_code == 400
+        assert b"Sorry, that email was not found." in response.data
+
+    def test_login_success(self):
+        response = self.client.post("/showSummary", data={"email": FAKE_CLUBS[0]["email"]})
+        assert response.status_code == 200
+        self.assertTemplateUsed("welcome.html")
+        self.assertContext("club", FAKE_CLUBS[0])
