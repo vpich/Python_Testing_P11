@@ -95,3 +95,19 @@ class UrlsTest(TestCase):
             "places": 7})
         assert response.status_code == 400
         assert b"more than places avalaible in this competition." in response.data
+
+    # BUG n5
+    def test_access_book_past_competition_fail(self):
+        competition = FAKE_COMPETITIONS[1]["name"]
+        club = FAKE_CLUBS[0]["name"]
+        response = self.client.get(f"/book/{competition}/{club}")
+        assert response.status_code == 200
+        self.assertTemplateUsed("welcome.html")
+        assert b"You can&#39;t book a previous competition" in response.data
+
+    def test_access_book_current_competition_success(self):
+        competition = FAKE_COMPETITIONS[0]["name"]
+        club = FAKE_CLUBS[0]["name"]
+        response = self.client.get(f"/book/{competition}/{club}")
+        assert response.status_code == 200
+        self.assertTemplateUsed("booking.html")
