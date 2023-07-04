@@ -111,3 +111,15 @@ class UrlsTest(TestCase):
         response = self.client.get(f"/book/{competition}/{club}")
         assert response.status_code == 200
         self.assertTemplateUsed("booking.html")
+
+    # BUG n6
+    def test_points_updated(self):
+        previous_club_points = int(FAKE_CLUBS[0]["points"])
+        place_number = 1
+        response = self.client.post("/purchasePlaces", data={
+            "competition": FAKE_COMPETITIONS[0]["name"],
+            "club": FAKE_CLUBS[0]["name"],
+            "places": place_number})
+        current_club_points = bytes(str(previous_club_points - place_number), "utf-8")
+        assert b"Points available: " + current_club_points in response.data
+        assert response.status_code == 200
