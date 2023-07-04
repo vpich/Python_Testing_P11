@@ -12,7 +12,7 @@ FAKE_CLUBS = [
     {
         "name": "Many_points_Club",
         "email": "test@club2.com",
-        "points": "12"
+        "points": "13"
     },
 ]
 
@@ -26,6 +26,11 @@ FAKE_COMPETITIONS = [
         "name": "Past_competition",
         "date": "2020-10-22 13:30:00",
         "numberOfPlaces": "15"
+    },
+    {
+        "name": "Limit_competition",
+        "date": "2024-10-22 13:30:00",
+        "numberOfPlaces": "20"
     }
 ]
 
@@ -72,3 +77,12 @@ class UrlsTest(TestCase):
             "club": FAKE_CLUBS[0]["name"],
             "places": 1})
         assert response.status_code == 200
+
+    # BUG n4
+    def test_book_more_than_limit_places_fail(self):
+        response = self.client.post("/purchasePlaces", data={
+            "competition": FAKE_COMPETITIONS[2]["name"],
+            "club": FAKE_CLUBS[1]["name"],
+            "places": 13})
+        assert response.status_code == 400
+        assert b"more than 12 places per competitions." in response.data
