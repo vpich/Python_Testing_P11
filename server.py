@@ -18,9 +18,7 @@ def loadCompetitions():
 def check_competition_date(date):
     converted_date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     now = datetime.datetime.now()
-    if converted_date > now:
-        return True
-    return False
+    return converted_date > now
 
 
 app = Flask(__name__)
