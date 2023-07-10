@@ -1,4 +1,5 @@
 import server
+import pytest
 
 
 def test_should_load_clubs_list():
@@ -27,15 +28,9 @@ def test_should_load_competitions_keys():
     assert sut_keys == whitelist_keys
 
 
-def test_check_future_date():
-    sut = server.check_competition_date
-    date = "2024-05-11 15:00:00"
-    expected_value = True
-    assert sut(date) == expected_value
-
-
-def test_check_past_date():
-    sut = server.check_competition_date
-    date = "2020-03-27 10:00:00"
-    expected_value = False
-    assert sut(date) == expected_value
+@pytest.mark.parametrize("date, expected_value", [
+    ("2020-03-27 10:00:00", False),
+    ("2024-05-11 10:00:00", True),
+])
+def test_check_date(date, expected_value):
+    assert server.check_competition_date(date) == expected_value
