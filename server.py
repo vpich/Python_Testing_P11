@@ -5,22 +5,20 @@ import datetime
 
 def loadClubs():
     with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+        list_of_clubs = json.load(c)['clubs']
+        return list_of_clubs
 
 
 def loadCompetitions():
     with open('competitions.json') as comps:
-         listOfCompetitions = json.load(comps)['competitions']
-         return listOfCompetitions
+        list_of_competitions = json.load(comps)['competitions']
+        return list_of_competitions
 
 
 def check_competition_date(date):
     converted_date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     now = datetime.datetime.now()
-    if converted_date > now:
-        return True
-    return False
+    return converted_date > now
 
 
 app = Flask(__name__)
@@ -28,6 +26,7 @@ app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+
 
 @app.route('/')
 def index():
