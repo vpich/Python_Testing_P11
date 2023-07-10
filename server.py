@@ -38,8 +38,7 @@ def showSummary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
     except Exception as e:
-        print(e)
-        abort(400, description="Sorry, that email was not found.")
+        abort(400, description=f"Sorry, that email was not found. (Error type: {e})")
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
@@ -65,11 +64,15 @@ def purchasePlaces():
     placesRequired = int(request.form['places'])
 
     if placesRequired > int(club["points"]):
-        abort(400, description="Sorry, you're not allowed to use unavalaible points.")
+        flash("Sorry, you're not allowed to use unavalaible points.")
+        return render_template('welcome.html', club=club, competitions=competitions)
     elif placesRequired > 12:
-        abort(400, description="Sorry, you can't buy more than 12 places per competitions.")
+        flash("Sorry, you can't buy more than 12 places per competitions.")
+        return render_template('welcome.html', club=club, competitions=competitions)
     elif placesRequired > int(competition['numberOfPlaces']):
-        abort(400, description="Sorry, you can't buy more than places avalaible in this competition.")
+        flash("Sorry, you can't buy more than places avalaible in this competition.")
+        return render_template('welcome.html', club=club, competitions=competitions)
+
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     club["points"] = int(club["points"]) - placesRequired
 
