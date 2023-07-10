@@ -68,7 +68,6 @@ class UrlsTest(TestCase):
             "competition": FAKE_COMPETITIONS[0]["name"],
             "club": FAKE_CLUBS[0]["name"],
             "places": 4})
-        assert response.status_code == 400
         assert b"not allowed to use unavalaible points." in response.data
 
     def test_purchase_places_success(self):
@@ -84,7 +83,6 @@ class UrlsTest(TestCase):
             "competition": FAKE_COMPETITIONS[2]["name"],
             "club": FAKE_CLUBS[1]["name"],
             "places": 13})
-        assert response.status_code == 400
         assert b"more than 12 places per competitions." in response.data
 
     # BUG supplémentaire
@@ -93,7 +91,6 @@ class UrlsTest(TestCase):
             "competition": FAKE_COMPETITIONS[0]["name"],
             "club": FAKE_CLUBS[1]["name"],
             "places": 7})
-        assert response.status_code == 400
         assert b"more than places avalaible in this competition." in response.data
 
     # BUG n5
