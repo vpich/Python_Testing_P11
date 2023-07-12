@@ -23,10 +23,10 @@ class ProjectPerfTest(HttpUser):
 
     @task
     def purchase_page(self):
-        club = ""
-        competition = ""
-        places = ""
-        self.client.post("/purchasePlace", {"club": club, "competition": competition, "places": places})
+        club = "Simply Lift"
+        competition = "Spring Festival"
+        places = "1"
+        self.client.post("/purchasePlaces", {"club": club, "competition": competition, "places": places})
 
     @task
     def points_board_page(self):
